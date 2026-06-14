@@ -1,14 +1,24 @@
+// ── Icon Components ────────────────────────────────────────────────────────
+
 const IconLink = ({ size = 20 }) => (
   <svg width={size} height={size} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
     <path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.1-1.1M10.172 13.828a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
   </svg>
 );
 
-const IconLogout = ({ size = 13 }) => (
+const IconChart = ({ size = 20 }) => (
   <svg width={size} height={size} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-    <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 7v1" />
+    <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
   </svg>
 );
+
+const IconLogout = ({ size = 15 }) => (
+  <svg width={size} height={size} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+    <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+  </svg>
+);
+
+// ── Header Component ───────────────────────────────────────────────────────
 
 export default function Header({ user, onLogout, currentPath }) {
   const isAnalytics = currentPath && (currentPath.startsWith('/analytics') || currentPath.startsWith('/analyts'));
@@ -21,49 +31,107 @@ export default function Header({ user, onLogout, currentPath }) {
     .toUpperCase();
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-slate-800 bg-[#070d1e]/85 backdrop-blur-md px-6 py-4 flex items-center justify-between">
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 bg-gradient-to-tr from-violet-600 to-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-violet-600/30">
-          {isAnalytics ? (
-            <svg width={20} height={20} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
-              <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-            </svg>
-          ) : (
-            <IconLink size={20} />
-          )}
+    <header style={{
+      position: 'sticky', top: 0, zIndex: 40,
+      background: 'rgba(2, 8, 23, 0.85)',
+      backdropFilter: 'blur(20px)',
+      WebkitBackdropFilter: 'blur(20px)',
+      borderBottom: '1px solid var(--border-subtle)',
+      padding: '0 24px',
+      height: 68,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    }}>
+      {/* Left: Brand */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+        {/* Logo mark */}
+        <div style={{
+          width: 42, height: 42,
+          borderRadius: 12,
+          background: 'linear-gradient(135deg, #06b6d4, #0891b2)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          boxShadow: '0 0 20px rgba(6,182,212,0.3), 0 4px 12px rgba(0,0,0,0.3)',
+          flexShrink: 0,
+        }}>
+          {isAnalytics ? <IconChart size={18} /> : <IconLink size={18} />}
         </div>
+
+        {/* Brand text */}
         <div>
-          <div className="font-extrabold text-lg tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-350 bg-clip-text text-transparent">
+          <div style={{
+            fontSize: 18, fontWeight: 900, letterSpacing: '-0.02em', lineHeight: 1.1,
+            background: 'linear-gradient(135deg, #f8fafc, #94a3b8)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+          }}>
             Katomarn
           </div>
-          <div className="text-[10px] text-violet-400 font-bold tracking-widest uppercase">
-            {isAnalytics ? 'URL Intelligence Report' : 'URL Management Platform'}
+          <div style={{
+            fontSize: 10, fontWeight: 700, letterSpacing: '0.12em',
+            textTransform: 'uppercase', color: 'var(--cyan-400)',
+            lineHeight: 1.2,
+          }}>
+            {isAnalytics ? 'URL Intelligence' : 'URL Management'}
           </div>
         </div>
       </div>
 
-      <div className="flex items-center gap-4">
-        {/* Profile Details */}
-        <div className="flex items-center gap-3">
-          <div className="hidden sm:flex flex-col text-right">
-            <span className="text-xs font-bold text-slate-200">{user?.name}</span>
-            <span className="text-[10px] text-slate-500 font-medium">{user?.email}</span>
+      {/* Center: nav indicator pill (analytics only) */}
+      {isAnalytics && (
+        <div style={{
+          position: 'absolute', left: '50%', transform: 'translateX(-50%)',
+          display: 'flex', alignItems: 'center', gap: 6,
+          padding: '5px 14px', borderRadius: 99,
+          background: 'rgba(34,211,238,0.08)',
+          border: '1px solid rgba(34,211,238,0.15)',
+        }}>
+          <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#22d3ee' }} className="animate-pulse-glow" />
+          <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--cyan-400)', letterSpacing: '0.06em' }}>Analytics Report</span>
+        </div>
+      )}
+
+      {/* Right: User + Logout */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+        {/* User info */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{ textAlign: 'right', display: 'none' }} id="user-info-desktop">
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)' }}>{user?.name}</div>
+            <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>{user?.email}</div>
           </div>
 
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-violet-600 to-fuchsia-600 flex items-center justify-center font-bold text-xs text-white shadow-md select-none">
+          {/* Avatar */}
+          <div style={{
+            width: 36, height: 36, borderRadius: 10,
+            background: 'linear-gradient(135deg, #06b6d4, #2dd4bf)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: 12, fontWeight: 800, color: 'white',
+            boxShadow: '0 0 15px rgba(6,182,212,0.25)',
+            letterSpacing: '0.02em',
+            flexShrink: 0,
+          }}>
             {initials}
+          </div>
+
+          {/* User name (visible on sm+) */}
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.2 }}>{user?.name}</span>
+            <span style={{ fontSize: 10, color: 'var(--text-muted)', lineHeight: 1.2 }}>{user?.email}</span>
           </div>
         </div>
 
-        <div className="w-px h-6 bg-slate-805" />
+        {/* Divider */}
+        <div style={{ width: 1, height: 28, background: 'var(--border-subtle)' }} />
 
-        {/* Logout Button */}
+        {/* Logout button */}
         <button
+          id="logout-button"
           onClick={onLogout}
-          className="flex items-center gap-2 px-3.5 py-2 rounded-xl border border-rose-500/20 bg-rose-500/5 hover:bg-rose-500/15 text-rose-400 hover:text-rose-350 transition-all text-xs font-bold cursor-pointer"
+          className="btn-danger"
+          style={{ gap: 6 }}
         >
           <IconLogout size={13} />
-          <span className="hidden sm:inline">Log Out</span>
+          <span>Log Out</span>
         </button>
       </div>
     </header>
