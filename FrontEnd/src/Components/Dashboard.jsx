@@ -2,201 +2,107 @@ import { useState, useEffect, useCallback } from 'react';
 import { api } from '../services/api';
 import QrModal from './QrModal';
 
-// ── Icon Components ────────────────────────────────────────────────────────
+// ── Icons ──────────────────────────────────────────────────────────────────
+const IconLink   = ({ size=15 }) => <svg width={size} height={size} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.1-1.1M10.172 13.828a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>;
+const IconChart  = ({ size=15 }) => <svg width={size} height={size} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>;
+const IconQr     = ({ size=14 }) => <svg width={size} height={size} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>;
+const IconRefresh= ({ size=14 }) => <svg width={size} height={size} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 0121.21 7.89M9 11l3-3m0 0l3 3m-3-3v12"/></svg>;
+const IconCopy   = ({ size=13 }) => <svg width={size} height={size} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3"/></svg>;
+const IconTrash  = ({ size=14 }) => <svg width={size} height={size} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>;
+const IconPlus   = ({ size=15 }) => <svg width={size} height={size} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round"><path d="M12 4v16m8-8H4"/></svg>;
+const IconWarn   = ({ size=14 }) => <svg width={size} height={size} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" style={{flexShrink:0,marginTop:1}}><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>;
+const IconCheck  = ({ size=14 }) => <svg width={size} height={size} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" style={{flexShrink:0,marginTop:1}}><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>;
+const IconClock  = ({ size=15 }) => <svg width={size} height={size} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>;
 
-const IconLink = ({ size = 16 }) => (
-  <svg width={size} height={size} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-    <path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.1-1.1M10.172 13.828a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-  </svg>
-);
-
-const IconChart = ({ size = 16 }) => (
-  <svg width={size} height={size} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-    <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-  </svg>
-);
-
-const IconQr = ({ size = 15 }) => (
-  <svg width={size} height={size} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-    <path d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
-  </svg>
-);
-
-const IconRefresh = ({ size = 15 }) => (
-  <svg width={size} height={size} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-    <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 0121.21 7.89M9 11l3-3m0 0l3 3m-3-3v12" />
-  </svg>
-);
-
-const IconCopy = ({ size = 13 }) => (
-  <svg width={size} height={size} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-    <path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3" />
-  </svg>
-);
-
-const IconTrash = ({ size = 14 }) => (
-  <svg width={size} height={size} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-    <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-  </svg>
-);
-
-const IconPlus = ({ size = 15 }) => (
-  <svg width={size} height={size} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
-    <path d="M12 4v16m8-8H4" />
-  </svg>
-);
-
-const IconWarn = ({ size = 15 }) => (
-  <svg width={size} height={size} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
-    <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-  </svg>
-);
-
-const IconCheck = ({ size = 15 }) => (
-  <svg width={size} height={size} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
-    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-  </svg>
-);
-
-const IconClock = ({ size = 15 }) => (
-  <svg width={size} height={size} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-    <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-  </svg>
-);
-
-function Spinner({ size = 16, color = 'currentColor' }) {
+function Spinner({ size = 15 }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" style={{ animation: 'spin 0.75s linear infinite', flexShrink: 0 }}>
-      <circle cx={12} cy={12} r={10} stroke={color} strokeWidth={4} style={{ opacity: 0.25 }} />
-      <path fill={color} style={{ opacity: 0.75 }} d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" style={{ animation: 'spin 0.8s linear infinite', flexShrink: 0 }}>
+      <circle cx={12} cy={12} r={10} stroke="currentColor" strokeWidth={4} style={{ opacity: 0.25 }} />
+      <path fill="currentColor" style={{ opacity: 0.75 }} d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
     </svg>
   );
 }
 
-// ── KPI Stat Card ──────────────────────────────────────────────────────────
+// ── KPI Stat Card ─────────────────────────────────────────────────────────
 
-function StatCard({ label, value, sub, accentColor, icon, bgColor, loading }) {
+function StatCard({ label, value, sub, icon, iconColor, iconBg, accent, loading }) {
   return (
-    <div className="stat-card" style={{ cursor: 'default' }}>
-      <div className="accent-bar" style={{ background: accentColor }} />
-
-      {/* Glow blob */}
-      <div style={{
-        position: 'absolute', bottom: -20, right: -20, width: 100, height: 100,
-        borderRadius: '50%', background: bgColor, filter: 'blur(30px)', opacity: 0,
-        transition: 'opacity 0.4s',
-      }} className="stat-glow" />
+    <div className="card-sm" style={{
+      padding: '20px 22px',
+      position: 'relative', overflow: 'hidden',
+      transition: 'all 0.2s ease',
+    }}
+      onMouseOver={e => { e.currentTarget.style.boxShadow = 'var(--shadow-lg)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+      onMouseOut={e => { e.currentTarget.style.boxShadow = 'var(--shadow-sm)'; e.currentTarget.style.transform = 'none'; }}
+    >
+      {/* Left accent bar */}
+      <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 3, background: accent, borderRadius: '8px 0 0 8px' }} />
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        <div style={{ flex: 1 }}>
-          <div style={{
-            fontSize: 10, fontWeight: 700, letterSpacing: '0.1em',
-            textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: 12,
-          }}>
-            {label}
-          </div>
+        <div>
+          <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-muted)', letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: 10 }}>{label}</div>
           {loading ? (
-            <div className="skeleton" style={{ height: 36, width: 80, marginBottom: 4 }} />
+            <div className="skeleton" style={{ height: 30, width: 70 }} />
           ) : (
-            <div style={{
-              fontSize: 32, fontWeight: 900, letterSpacing: '-0.03em',
-              color: '#f1f5f9', fontFamily: 'JetBrains Mono, monospace', lineHeight: 1,
-            }}>
+            <div style={{ fontSize: 30, fontWeight: 900, color: 'var(--text-primary)', letterSpacing: '-0.03em', fontFamily: 'JetBrains Mono, monospace', lineHeight: 1 }}>
               {value}
             </div>
           )}
         </div>
-
-        <div style={{
-          width: 44, height: 44, borderRadius: 12,
-          background: bgColor,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          color: accentColor, flexShrink: 0,
-        }}>
+        <div style={{ width: 40, height: 40, borderRadius: 10, background: iconBg, display: 'flex', alignItems: 'center', justifyContent: 'center', color: iconColor, flexShrink: 0 }}>
           {icon}
         </div>
       </div>
-
-      <div style={{
-        display: 'flex', alignItems: 'center', gap: 6, marginTop: 14,
-        fontSize: 11, color: 'var(--text-muted)', fontWeight: 500,
-      }}>
-        <div style={{ width: 6, height: 6, borderRadius: '50%', background: accentColor }} />
-        {sub}
-      </div>
+      <div style={{ marginTop: 12, fontSize: 11.5, color: 'var(--text-muted)', fontWeight: 500 }}>{sub}</div>
     </div>
   );
 }
 
 // ── Table Skeleton ─────────────────────────────────────────────────────────
 
-const TableSkeleton = () => (
-  <>
-    {[1, 2, 3].map((n) => (
-      <tr key={n}>
-        <td style={{ padding: '16px 20px' }}><div className="skeleton" style={{ height: 14, width: 180 }} /></td>
-        <td style={{ padding: '16px 20px' }}><div className="skeleton" style={{ height: 14, width: 120 }} /></td>
-        <td style={{ padding: '16px 20px' }}><div className="skeleton" style={{ height: 22, width: 70, borderRadius: 99 }} /></td>
-        <td style={{ padding: '16px 20px' }}><div className="skeleton" style={{ height: 14, width: 90 }} /></td>
-        <td style={{ padding: '16px 20px', textAlign: 'center' }}><div className="skeleton" style={{ height: 22, width: 44, borderRadius: 8, margin: '0 auto' }} /></td>
-        <td style={{ padding: '16px 20px' }}><div className="skeleton" style={{ height: 30, width: 160, borderRadius: 8, marginLeft: 'auto' }} /></td>
-      </tr>
-    ))}
-  </>
-);
-
-// ── Action Button ──────────────────────────────────────────────────────────
-
-function ActionBtn({ onClick, children, variant = 'default', title }) {
-  const base = {
-    display: 'inline-flex', alignItems: 'center', gap: 5,
-    padding: '6px 12px', borderRadius: 7,
-    fontSize: 11, fontWeight: 600, cursor: 'pointer',
-    transition: 'all 0.15s ease', border: '1px solid',
-    fontFamily: 'Inter, sans-serif',
-  };
-
-  const styles = {
-    default: {
-      ...base,
-      borderColor: 'var(--border-subtle)',
-      background: 'rgba(5,10,25,0.5)',
-      color: 'var(--text-secondary)',
-    },
-    success: {
-      ...base,
-      borderColor: 'rgba(52,211,153,0.3)',
-      background: 'rgba(52,211,153,0.08)',
-      color: '#34d399',
-    },
-  };
-
+function TableSkeleton() {
   return (
-    <button
-      onClick={onClick}
-      style={styles[variant] || styles.default}
-      title={title}
-      onMouseOver={e => {
-        if (variant === 'default') {
-          e.currentTarget.style.borderColor = 'var(--border-accent)';
-          e.currentTarget.style.color = 'var(--text-primary)';
-          e.currentTarget.style.background = 'rgba(34,211,238,0.05)';
-        }
-      }}
-      onMouseOut={e => {
-        if (variant === 'default') {
-          e.currentTarget.style.borderColor = 'var(--border-subtle)';
-          e.currentTarget.style.color = 'var(--text-secondary)';
-          e.currentTarget.style.background = 'rgba(5,10,25,0.5)';
-        }
-      }}
-    >
-      {children}
-    </button>
+    <>
+      {[1, 2, 3].map(n => (
+        <tr key={n}>
+          <td style={{ padding: '14px 18px' }}><div className="skeleton" style={{ height: 13, width: 200 }} /></td>
+          <td style={{ padding: '14px 18px' }}><div className="skeleton" style={{ height: 13, width: 110 }} /></td>
+          <td style={{ padding: '14px 18px' }}><div className="skeleton" style={{ height: 20, width: 70, borderRadius: 99 }} /></td>
+          <td style={{ padding: '14px 18px' }}><div className="skeleton" style={{ height: 13, width: 80 }} /></td>
+          <td style={{ padding: '14px 18px', textAlign: 'center' }}><div className="skeleton" style={{ height: 20, width: 40, borderRadius: 6, margin: '0 auto' }} /></td>
+          <td style={{ padding: '14px 18px' }}><div className="skeleton" style={{ height: 28, width: 160, borderRadius: 6, marginLeft: 'auto' }} /></td>
+        </tr>
+      ))}
+    </>
   );
 }
 
-// ── Main Dashboard ─────────────────────────────────────────────────────────
+// ── Inline action button ───────────────────────────────────────────────────
+
+function ActionBtn({ onClick, children, green }) {
+  const base = {
+    display: 'inline-flex', alignItems: 'center', gap: 4,
+    padding: '5px 11px', borderRadius: 6,
+    fontSize: 11.5, fontWeight: 600, cursor: 'pointer',
+    border: '1px solid', fontFamily: 'Inter, sans-serif',
+    transition: 'all 0.12s ease',
+    background: green ? '#f0fdf4' : 'var(--bg-white)',
+    borderColor: green ? '#bbf7d0' : 'var(--border-base)',
+    color: green ? '#16a34a' : 'var(--text-secondary)',
+  };
+  return (
+    <button style={base} onClick={onClick}
+      onMouseOver={e => {
+        if (!green) { e.currentTarget.style.borderColor = 'var(--border-strong)'; e.currentTarget.style.background = 'var(--bg-muted)'; }
+      }}
+      onMouseOut={e => {
+        if (!green) { e.currentTarget.style.borderColor = 'var(--border-base)'; e.currentTarget.style.background = 'var(--bg-white)'; }
+      }}
+    >{children}</button>
+  );
+}
+
+// ── Dashboard ─────────────────────────────────────────────────────────────
 
 export default function Dashboard({ user, navigate }) {
   const [urls, setUrls]                     = useState([]);
@@ -209,308 +115,173 @@ export default function Dashboard({ user, navigate }) {
   const [copiedId, setCopiedId]             = useState(null);
   const [fetchError, setFetchError]         = useState('');
   const [tableAlert, setTableAlert]         = useState({ type: '', message: '' });
+  const [activeQrUrl, setActiveQrUrl]       = useState(null);
+  const [activeQrCode, setActiveQrCode]     = useState(null);
 
-  // QR Modal
-  const [activeQrUrl, setActiveQrUrl]   = useState(null);
-  const [activeQrCode, setActiveQrCode] = useState(null);
-
-  // Computed stats
   const totalClicks = urls.reduce((a, u) => a + (u.clicks || 0), 0);
   const activeLinks = urls.filter(u => !u.expiresAt || new Date(u.expiresAt) > new Date()).length;
   const avgClicks   = urls.length ? Math.round(totalClicks / urls.length) : 0;
 
-  // API: fetch URLs
   const fetchUrls = useCallback(async () => {
-    setFetchLoading(true);
-    setFetchError('');
-    try {
-      const data = await api.get('/urls');
-      setUrls(data.urls || []);
-    } catch (err) {
-      setFetchError(err.message || 'Failed to retrieve shortened links.');
-    } finally {
-      setFetchLoading(false);
-    }
+    setFetchLoading(true); setFetchError('');
+    try { const d = await api.get('/urls'); setUrls(d.urls || []); }
+    catch (err) { setFetchError(err.message || 'Failed to retrieve links.'); }
+    finally { setFetchLoading(false); }
   }, []);
 
   useEffect(() => { fetchUrls(); }, [fetchUrls]);
 
-  // URL Validation
-  const validateUrl = (urlStr) => {
-    try {
-      const parsed = new URL(urlStr);
-      return parsed.protocol === 'http:' || parsed.protocol === 'https:';
-    } catch { return false; }
-  };
+  const validateUrl = (s) => { try { const p = new URL(s); return p.protocol === 'http:' || p.protocol === 'https:'; } catch { return false; } };
 
-  // API: Shorten
   const handleShorten = async (e) => {
     e.preventDefault();
-    setUrlError('');
-    setUrlSuccess('');
-
+    setUrlError(''); setUrlSuccess('');
     if (!longUrl) { setUrlError('Please enter a destination URL.'); return; }
     if (!validateUrl(longUrl.trim())) { setUrlError('Invalid URL. Must start with http:// or https://'); return; }
     if (expiresAt && new Date(expiresAt) < new Date()) { setUrlError('Expiry date cannot be in the past.'); return; }
-
     setShortenLoading(true);
     try {
-      const response = await api.post('/urls/shorten', {
-        originalUrl: longUrl.trim(),
-        expiresAt: expiresAt || null,
-      });
+      const response = await api.post('/urls/shorten', { originalUrl: longUrl.trim(), expiresAt: expiresAt || null });
       setUrlSuccess('Link shortened successfully!');
-      setUrls((prev) => [response.data, ...prev]);
-      setLongUrl('');
-      setExpiresAt('');
-      setTimeout(() => setUrlSuccess(''), 3000);
-    } catch (err) {
-      setUrlError(err.message || 'Failed to shorten URL');
-    } finally {
-      setShortenLoading(false);
-    }
+      setUrls(prev => [response.data, ...prev]);
+      setLongUrl(''); setExpiresAt('');
+      setTimeout(() => setUrlSuccess(''), 3500);
+    } catch (err) { setUrlError(err.message || 'Failed to shorten URL'); }
+    finally { setShortenLoading(false); }
   };
 
-  // API: Delete
   const handleDeleteUrl = async (id) => {
     if (!window.confirm('Delete this shortened link?')) return;
     setTableAlert({ type: '', message: '' });
     try {
       await api.delete(`/urls/${id}`);
-      setUrls((prev) => prev.filter((item) => item.id !== id));
-      setTableAlert({ type: 'success', message: 'Link was deleted successfully.' });
+      setUrls(prev => prev.filter(item => item.id !== id));
+      setTableAlert({ type: 'success', message: 'Link deleted successfully.' });
       setTimeout(() => setTableAlert({ type: '', message: '' }), 3000);
-    } catch (err) {
-      setTableAlert({ type: 'error', message: err.message || 'Failed to delete URL' });
-    }
+    } catch (err) { setTableAlert({ type: 'error', message: err.message || 'Failed to delete URL' }); }
   };
 
-  // Copy
   const handleCopy = (url, id) => {
-    navigator.clipboard.writeText(url).then(() => {
-      setCopiedId(id);
-      setTimeout(() => setCopiedId(null), 2000);
-    });
+    navigator.clipboard.writeText(url).then(() => { setCopiedId(id); setTimeout(() => setCopiedId(null), 2000); });
   };
 
-  const truncate = (text, max = 44) =>
-    text.length <= max ? text : text.slice(0, max) + '…';
+  const truncate = (text, max = 46) => text.length <= max ? text : text.slice(0, max) + '…';
 
   return (
     <>
       <main style={{
-        position: 'relative', zIndex: 1,
-        width: '100%', maxWidth: 1280,
-        margin: '0 auto',
-        padding: '32px 24px',
-        display: 'flex', flexDirection: 'column', gap: 28,
-        animation: 'slide-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both',
+        width: '100%', maxWidth: 1300, margin: '0 auto',
+        padding: '28px 28px 48px',
+        display: 'flex', flexDirection: 'column', gap: 24,
+        animation: 'fade-up 0.4s cubic-bezier(0.16,1,0.3,1) both',
       }}>
 
-        {/* ── Welcome Banner ── */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
+        {/* ── Page Header ── */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
           <div>
-            <h1 style={{
-              fontSize: 26, fontWeight: 900, letterSpacing: '-0.025em', lineHeight: 1.2,
-              background: 'linear-gradient(135deg, #f1f5f9, #94a3b8)',
-              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-            }}>
-              Welcome back, {user?.name?.split(' ')[0]} 👋
+            <h1 style={{ fontSize: 22, fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.025em', lineHeight: 1.1 }}>
+              Dashboard
             </h1>
-            <p style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: 4, fontWeight: 500 }}>
-              Manage and track your shortened links in real-time.
-            </p>
-          </div>
-          <div style={{
-            display: 'flex', alignItems: 'center', gap: 8,
-            padding: '6px 14px', borderRadius: 99,
-            background: 'rgba(34,211,238,0.07)', border: '1px solid rgba(34,211,238,0.15)',
-          }}>
-            <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#22d3ee' }} className="animate-pulse-glow" />
-            <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--cyan-400)', letterSpacing: '0.06em' }}>LIVE DASHBOARD</span>
-          </div>
-        </div>
-
-        {/* ── KPI Stats Grid ── */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
-          <StatCard
-            label="Total Links"
-            value={urls.length}
-            sub="Links created"
-            accentColor="#22d3ee"
-            bgColor="rgba(34,211,238,0.08)"
-            icon={<IconLink size={20} />}
-            loading={fetchLoading && urls.length === 0}
-          />
-          <StatCard
-            label="Total Clicks"
-            value={totalClicks.toLocaleString()}
-            sub="Across all links"
-            accentColor="#34d399"
-            bgColor="rgba(52,211,153,0.08)"
-            icon={<IconChart size={20} />}
-            loading={fetchLoading && urls.length === 0}
-          />
-          <StatCard
-            label="Active Links"
-            value={activeLinks}
-            sub="Not yet expired"
-            accentColor="#38bdf8"
-            bgColor="rgba(56,189,248,0.08)"
-            icon={<IconCheck size={20} />}
-            loading={fetchLoading && urls.length === 0}
-          />
-          <StatCard
-            label="Avg. Clicks"
-            value={avgClicks}
-            sub="Per shortened link"
-            accentColor="#fb923c"
-            bgColor="rgba(251,146,60,0.08)"
-            icon={<IconChart size={20} />}
-            loading={fetchLoading && urls.length === 0}
-          />
-        </div>
-
-        {/* ── Create Link Panel ── */}
-        <div className="glass-card-elevated" style={{ padding: '28px 28px', position: 'relative', overflow: 'hidden' }}>
-          {/* Corner glow */}
-          <div style={{
-            position: 'absolute', top: -40, right: -40,
-            width: 200, height: 200, borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(34,211,238,0.06) 0%, transparent 70%)',
-            pointerEvents: 'none',
-          }} />
-
-          {/* Top accent */}
-          <div style={{
-            position: 'absolute', top: 0, left: 0, right: 0, height: 1,
-            background: 'linear-gradient(90deg, transparent, rgba(34,211,238,0.4), transparent)',
-          }} />
-
-          <div style={{ marginBottom: 20 }}>
-            <h2 style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-0.02em', color: '#f1f5f9' }}>
-              Create Shortened Link
-            </h2>
             <p style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: 4 }}>
-              Generate clean, trackable short URLs with optional expiry.
+              Good to see you, <strong style={{ color: 'var(--text-secondary)' }}>{user?.name?.split(' ')[0]}</strong>. Here's your link activity overview.
             </p>
           </div>
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: 6,
+            padding: '5px 12px', borderRadius: 99,
+            background: 'rgba(79,70,229,0.07)',
+            border: '1px solid rgba(79,70,229,0.14)',
+            fontSize: 11, fontWeight: 700, color: 'var(--accent-600)',
+            letterSpacing: '0.04em', textTransform: 'uppercase',
+          }}>
+            <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--accent-600)', opacity: 0.8 }} />
+            Live
+          </div>
+        </div>
 
-          <form onSubmit={handleShorten} style={{ display: 'flex', flexWrap: 'wrap', gap: 14, alignItems: 'flex-end' }}>
-            {/* URL Input */}
-            <div style={{ flex: '1 1 280px', minWidth: 0 }}>
+        {/* ── KPI Grid ── */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: 14 }}>
+          <StatCard label="Total Links"   value={urls.length}               sub="Shortened links created"  icon={<IconLink size={16}/>}  iconColor="#4f46e5" iconBg="rgba(79,70,229,0.08)"  accent="#4f46e5" loading={fetchLoading && !urls.length} />
+          <StatCard label="Total Clicks"  value={totalClicks.toLocaleString()} sub="Redirections across links" icon={<IconChart size={16}/>} iconColor="#0891b2" iconBg="rgba(8,145,178,0.08)"   accent="#0891b2" loading={fetchLoading && !urls.length} />
+          <StatCard label="Active Links"  value={activeLinks}               sub="Currently not expired"    icon={<IconCheck size={16}/>} iconColor="#16a34a" iconBg="rgba(22,163,74,0.08)"   accent="#16a34a" loading={fetchLoading && !urls.length} />
+          <StatCard label="Avg. Clicks"   value={avgClicks}                 sub="Per shortened link"       icon={<IconChart size={16}/>} iconColor="#b45309" iconBg="rgba(180,83,9,0.08)"    accent="#f59e0b" loading={fetchLoading && !urls.length} />
+        </div>
+
+        {/* ── Create Link ── */}
+        <div className="card" style={{ padding: '24px 26px' }}>
+          <div style={{ marginBottom: 18 }}>
+            <h2 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>Create Shortened Link</h2>
+            <p style={{ fontSize: 12.5, color: 'var(--text-muted)', marginTop: 3 }}>Generate a trackable short URL with an optional expiry date.</p>
+          </div>
+
+          <form onSubmit={handleShorten} style={{ display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'flex-end' }}>
+            <div style={{ flex: '1 1 260px', minWidth: 0 }}>
               <label className="form-label">Destination URL</label>
               <div className="input-with-icon">
-                <span className="input-icon"><IconLink size={16} /></span>
-                <input
-                  id="url-input"
-                  className="form-input"
-                  type="text"
-                  value={longUrl}
-                  onChange={(e) => { setLongUrl(e.target.value); if (urlError) setUrlError(''); }}
-                  placeholder="https://example.com/your/long/url/here"
+                <span className="input-icon"><IconLink size={15} /></span>
+                <input id="url-input" className="form-input" type="text" value={longUrl}
+                  onChange={e => { setLongUrl(e.target.value); if (urlError) setUrlError(''); }}
+                  placeholder="https://example.com/your/long/url"
                   disabled={shortenLoading}
                 />
               </div>
             </div>
 
-            {/* Expiry */}
-            <div style={{ flex: '0 1 240px' }}>
-              <label className="form-label">Link Expiry (optional)</label>
+            <div style={{ flex: '0 1 220px' }}>
+              <label className="form-label">Expiry (optional)</label>
               <div className="input-with-icon">
-                <span className="input-icon"><IconClock size={16} /></span>
-                <input
-                  id="expiry-input"
-                  className="form-input"
-                  type="datetime-local"
-                  value={expiresAt}
-                  onChange={(e) => setExpiresAt(e.target.value)}
+                <span className="input-icon"><IconClock size={15} /></span>
+                <input id="expiry-input" className="form-input" type="datetime-local" value={expiresAt}
+                  onChange={e => setExpiresAt(e.target.value)}
                   min={new Date().toISOString().slice(0, 16)}
                   disabled={shortenLoading}
-                  style={{ paddingLeft: 42 }}
+                  style={{ paddingLeft: 40 }}
                 />
               </div>
             </div>
 
-            {/* Submit */}
-            <div style={{ flex: '0 0 auto' }}>
-              <button
-                id="shorten-url-btn"
-                type="submit"
-                disabled={shortenLoading}
-                className="btn-primary"
-                style={{ height: 46, paddingLeft: 22, paddingRight: 22, gap: 8 }}
-              >
-                {shortenLoading ? <Spinner size={16} /> : <IconPlus size={15} />}
-                {shortenLoading ? 'Shortening…' : 'Shorten URL'}
-              </button>
-            </div>
+            <button id="shorten-url-btn" type="submit" disabled={shortenLoading}
+              className="btn-primary" style={{ height: 42, gap: 6, paddingLeft: 20, paddingRight: 20, flexShrink: 0 }}
+            >
+              {shortenLoading ? <Spinner size={15} /> : <IconPlus size={14} />}
+              {shortenLoading ? 'Shortening…' : 'Shorten URL'}
+            </button>
           </form>
 
-          {urlError && (
-            <div className="alert-error" style={{ marginTop: 16 }}>
-              <IconWarn size={15} />
-              <span>{urlError}</span>
-            </div>
-          )}
-          {urlSuccess && (
-            <div className="alert-success" style={{ marginTop: 16 }}>
-              <IconCheck size={15} />
-              <span>{urlSuccess}</span>
-            </div>
-          )}
+          {urlError   && <div className="alert-error"   style={{ marginTop: 14 }}><IconWarn size={14}/><span>{urlError}</span></div>}
+          {urlSuccess && <div className="alert-success" style={{ marginTop: 14 }}><IconCheck size={14}/><span>{urlSuccess}</span></div>}
         </div>
 
-        {/* ── Links Table Panel ── */}
-        <div style={{
-          background: 'var(--bg-glass)',
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
-          border: '1px solid var(--border-subtle)',
-          borderRadius: 20,
-          overflow: 'hidden',
-        }}>
+        {/* ── Links Table ── */}
+        <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
           {/* Panel header */}
           <div style={{
             display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between',
-            alignItems: 'center', padding: '20px 24px', gap: 16,
-            borderBottom: '1px solid var(--border-subtle)',
+            alignItems: 'center', padding: '18px 24px', gap: 12,
+            borderBottom: '1px solid var(--border-light)',
+            background: 'var(--bg-surface)',
           }}>
             <div>
-              <h2 style={{ fontSize: 17, fontWeight: 800, letterSpacing: '-0.02em', color: '#f1f5f9' }}>
-                Your Shortened Links
-              </h2>
-              <p style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 3 }}>
-                Manage, copy, and trace your links. Click a row to view analytics.
-              </p>
+              <h2 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>Your Shortened Links</h2>
+              <p style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 2 }}>Click any row to view detailed analytics.</p>
             </div>
-
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <span className="badge badge-cyan">
-                {urls.length} Link{urls.length !== 1 ? 's' : ''}
-              </span>
-
-              <button
-                id="refresh-links-btn"
-                onClick={fetchUrls}
-                disabled={fetchLoading}
-                className="btn-ghost"
-                style={{ width: 38, height: 38, padding: 0, justifyContent: 'center' }}
+              <span className="badge badge-indigo">{urls.length} link{urls.length !== 1 ? 's' : ''}</span>
+              <button id="refresh-links-btn" onClick={fetchUrls} disabled={fetchLoading}
+                className="btn-secondary"
+                style={{ width: 36, height: 36, padding: 0, justifyContent: 'center', minWidth: 'unset' }}
                 title="Refresh"
               >
-                {fetchLoading ? <Spinner size={14} /> : <IconRefresh size={14} />}
+                {fetchLoading ? <Spinner size={13} /> : <IconRefresh size={13} />}
               </button>
             </div>
           </div>
 
-          {/* Table Alert */}
+          {/* Table alert */}
           {tableAlert.message && (
             <div style={{ padding: '0 24px' }}>
-              <div
-                className={tableAlert.type === 'success' ? 'alert-success' : 'alert-error'}
-                style={{ marginTop: 16 }}
-              >
-                {tableAlert.type === 'success' ? <IconCheck size={14} /> : <IconWarn size={14} />}
+              <div className={tableAlert.type === 'success' ? 'alert-success' : 'alert-error'} style={{ marginTop: 14 }}>
+                {tableAlert.type === 'success' ? <IconCheck size={13}/> : <IconWarn size={13}/>}
                 <span>{tableAlert.message}</span>
               </div>
             </div>
@@ -518,36 +289,22 @@ export default function Dashboard({ user, navigate }) {
 
           {/* Content */}
           {fetchError ? (
-            <div style={{
-              display: 'flex', flexDirection: 'column', alignItems: 'center',
-              justifyContent: 'center', padding: '64px 24px', textAlign: 'center',
-            }}>
-              <div style={{
-                width: 56, height: 56, borderRadius: 16, marginBottom: 16,
-                background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f87171',
-              }}>
-                <IconWarn size={22} />
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '56px 24px', textAlign: 'center' }}>
+              <div style={{ width: 48, height: 48, borderRadius: 12, marginBottom: 14, background: 'var(--error-bg)', border: '1px solid var(--error-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--error-text)' }}>
+                <IconWarn size={20} />
               </div>
-              <h3 style={{ fontSize: 16, fontWeight: 700, color: '#e2e8f0', marginBottom: 8 }}>Failed to load links</h3>
-              <p style={{ fontSize: 13, color: 'var(--text-muted)', maxWidth: 320, marginBottom: 24, lineHeight: 1.6 }}>{fetchError}</p>
-              <button onClick={fetchUrls} className="btn-ghost">Retry Connection</button>
+              <h3 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 6 }}>Failed to load links</h3>
+              <p style={{ fontSize: 13, color: 'var(--text-muted)', maxWidth: 300, marginBottom: 20, lineHeight: 1.6 }}>{fetchError}</p>
+              <button onClick={fetchUrls} className="btn-secondary">Retry</button>
             </div>
           ) : urls.length === 0 && !fetchLoading ? (
-            <div style={{
-              display: 'flex', flexDirection: 'column', alignItems: 'center',
-              justifyContent: 'center', padding: '72px 24px', textAlign: 'center',
-            }}>
-              <div style={{
-                width: 64, height: 64, borderRadius: 18, marginBottom: 20,
-                background: 'rgba(34,211,238,0.05)', border: '1px dashed var(--border-dim)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)',
-              }}>
-                <IconLink size={26} />
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '64px 24px', textAlign: 'center' }}>
+              <div style={{ width: 56, height: 56, borderRadius: 14, marginBottom: 16, background: 'var(--bg-muted)', border: '1px solid var(--border-base)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)' }}>
+                <IconLink size={24} />
               </div>
-              <h3 style={{ fontSize: 16, fontWeight: 700, color: '#94a3b8', marginBottom: 8 }}>No links yet</h3>
-              <p style={{ fontSize: 13, color: 'var(--text-muted)', maxWidth: 300, lineHeight: 1.6 }}>
-                Enter a destination URL above to create your first shortened link.
+              <h3 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 6 }}>No links yet</h3>
+              <p style={{ fontSize: 13, color: 'var(--text-muted)', maxWidth: 280, lineHeight: 1.6 }}>
+                Paste a long URL above to create your first shortened link.
               </p>
             </div>
           ) : (
@@ -564,106 +321,54 @@ export default function Dashboard({ user, navigate }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {fetchLoading && urls.length === 0 ? (
-                    <TableSkeleton />
-                  ) : (
-                    urls.map((item) => {
+                  {fetchLoading && !urls.length ? <TableSkeleton /> : (
+                    urls.map(item => {
                       const isExpired = item.expiresAt && new Date() > new Date(item.expiresAt);
                       const handleRowClick = () => navigate(`/analytics?id=${item.id}`);
-
                       return (
                         <tr key={item.id}>
-                          {/* Original URL */}
-                          <td
-                            onClick={handleRowClick}
-                            style={{ cursor: 'pointer', maxWidth: 240 }}
-                          >
-                            <span style={{
-                              display: 'block', overflow: 'hidden', textOverflow: 'ellipsis',
-                              whiteSpace: 'nowrap', fontSize: 12,
-                            }}>
-                              {truncate(item.originalUrl, 42)}
-                            </span>
+                          <td onClick={handleRowClick} style={{ cursor: 'pointer', maxWidth: 240 }}>
+                            <span style={{ display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontSize: 12.5 }}>{truncate(item.originalUrl, 44)}</span>
                           </td>
-
-                          {/* Short URL */}
                           <td onClick={handleRowClick} style={{ cursor: 'pointer' }}>
-                            <span style={{
-                              fontFamily: 'JetBrains Mono, monospace',
-                              fontSize: 12, fontWeight: 600, color: '#22d3ee',
-                            }}>
-                              {item.shortUrl}
-                            </span>
+                            <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, fontWeight: 600, color: 'var(--accent-600)' }}>{item.shortUrl}</span>
                           </td>
-
-                          {/* Expiry */}
                           <td onClick={handleRowClick} style={{ cursor: 'pointer' }}>
                             {item.expiresAt ? (
-                              isExpired ? (
-                                <span className="badge badge-rose">Expired</span>
-                              ) : (
-                                <span className="badge badge-emerald">
-                                  {new Date(item.expiresAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
-                                </span>
-                              )
+                              isExpired
+                                ? <span className="badge badge-red">Expired</span>
+                                : <span className="badge badge-green">{new Date(item.expiresAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</span>
                             ) : (
-                              <span style={{ fontSize: 11, color: 'var(--text-muted)', fontStyle: 'italic' }}>Never</span>
+                              <span style={{ fontSize: 12, color: 'var(--text-muted)', fontStyle: 'italic' }}>Never</span>
                             )}
                           </td>
-
-                          {/* Created */}
-                          <td onClick={handleRowClick} style={{ cursor: 'pointer', fontSize: 12 }}>
+                          <td onClick={handleRowClick} style={{ cursor: 'pointer', fontSize: 12.5 }}>
                             {new Date(item.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
                           </td>
-
-                          {/* Clicks */}
                           <td onClick={handleRowClick} style={{ cursor: 'pointer', textAlign: 'center' }}>
                             <span style={{
                               display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                              minWidth: 44, padding: '3px 10px', borderRadius: 7,
-                              background: 'rgba(34,211,238,0.07)', border: '1px solid rgba(34,211,238,0.15)',
+                              minWidth: 38, padding: '3px 8px', borderRadius: 6,
+                              background: 'var(--bg-muted)', border: '1px solid var(--border-base)',
                               fontFamily: 'JetBrains Mono, monospace', fontSize: 12, fontWeight: 700,
-                              color: '#22d3ee',
+                              color: 'var(--text-secondary)',
                             }}>
                               {item.clicks}
                             </span>
                           </td>
-
-                          {/* Actions */}
                           <td style={{ textAlign: 'right' }}>
                             <div style={{ display: 'flex', gap: 6, justifyContent: 'flex-end', alignItems: 'center' }}>
-                              {/* Copy */}
-                              <ActionBtn
-                                onClick={() => handleCopy(item.shortUrl, item.id)}
-                                variant={copiedId === item.id ? 'success' : 'default'}
-                              >
-                                {copiedId === item.id ? (
-                                  <>✓ Copied</>
-                                ) : (
-                                  <><IconCopy size={12} /> Copy</>
-                                )}
+                              <ActionBtn onClick={() => handleCopy(item.shortUrl, item.id)} green={copiedId === item.id}>
+                                {copiedId === item.id ? '✓ Copied' : <><IconCopy size={12}/> Copy</>}
                               </ActionBtn>
-
-                              {/* QR */}
-                              <ActionBtn
-                                onClick={() => { setActiveQrUrl(item.shortUrl); setActiveQrCode(item.shortCode); }}
-                              >
-                                <IconQr size={12} /> QR
+                              <ActionBtn onClick={() => { setActiveQrUrl(item.shortUrl); setActiveQrCode(item.shortCode); }}>
+                                <IconQr size={12}/> QR
                               </ActionBtn>
-
-                              {/* Stats */}
                               <ActionBtn onClick={handleRowClick}>
-                                <IconChart size={12} /> Stats
+                                <IconChart size={12}/> Stats
                               </ActionBtn>
-
-                              {/* Delete */}
-                              <button
-                                onClick={() => handleDeleteUrl(item.id)}
-                                className="btn-danger"
-                                style={{ padding: '6px 10px', minWidth: 'unset' }}
-                                title="Delete Link"
-                              >
-                                <IconTrash size={13} />
+                              <button onClick={() => handleDeleteUrl(item.id)} className="btn-danger" style={{ padding: '5px 10px' }} title="Delete">
+                                <IconTrash size={13}/>
                               </button>
                             </div>
                           </td>
@@ -678,7 +383,6 @@ export default function Dashboard({ user, navigate }) {
         </div>
       </main>
 
-      {/* QR Modal */}
       {activeQrUrl && (
         <QrModal
           shortUrl={activeQrUrl}
