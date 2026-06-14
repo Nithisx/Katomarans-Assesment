@@ -1,4 +1,9 @@
-const BASE_URL = 'http://localhost:5000/api';
+const getBaseUrl = () => {
+  let url = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+  return url.endsWith('/') ? url.slice(0, -1) : url;
+};
+
+export const BASE_URL = getBaseUrl();
 
 let accessToken = null;
 let logoutCallback = null;

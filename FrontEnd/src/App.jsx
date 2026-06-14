@@ -4,7 +4,7 @@ import Login from './Components/Login';
 import Dashboard from './Components/Dashboard';
 import AnalyticsReport from './Components/AnalyticsReport';
 import Header from './Components/Header';
-import { api, setAccessToken, registerLogoutCallback } from './services/api';
+import { api, setAccessToken, registerLogoutCallback, BASE_URL } from './services/api';
 import './index.css';
 
 // ── Loading Screen ────────────────────────────────────────────────────────
@@ -86,7 +86,7 @@ function App() {
 
     const checkSession = async () => {
       try {
-        const refreshData = await fetch('https://katomarans-assesment.onrender.com/api/auth/refresh', {
+        const refreshData = await fetch(`${BASE_URL}/auth/refresh`, {
           method: 'POST',
           credentials: 'include',
         });

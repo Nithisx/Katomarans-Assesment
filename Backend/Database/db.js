@@ -11,9 +11,17 @@ dotenv.config({ path: path.resolve(__dirname, '../.env') });
 const { Pool } = pg;
 
 // Connection Pool Configuration
+const isProduction = process.env.NODE_ENV === 'production';
+const hasRemoteDbUrl = process.env.DATABASE_URL && !process.env.DATABASE_URL.includes('localhost') && !process.env.DATABASE_URL.includes('127.0.0.1');
+
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL || `postgresql://${process.env.DB_USER || 'postgres'}:${process.env.DB_PASSWORD || 'postgres'}@${process.env.DB_HOST || 'localhost'}:${process.env.DB_PORT || '5432'}/${process.env.DB_NAME || 'katomarn'}`,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+  ssl: (isProduction || hasRemoteDbUrl) ? { rejectUnauthorized: false } : false,
+});
+
+// Handle pool errors on idle clients to prevent crashing the server
+pool.on('error', (err) => {
+  console.error('❌ Unexpected error on idle database client:', err.message);
 });
 
 // Test Database Connection on startup
