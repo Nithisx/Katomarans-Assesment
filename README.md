@@ -117,7 +117,7 @@ Run the backend with Nodemon for hot-reloading:
 cd Backend
 npm run start # Or: nodemon Index.js
 ```
-The server will run at `https://katomarans-assesment.onrender.com`.
+The server will run at `https://s-jgt9.onrender.com`.
 
 ### Start Frontend Server
 Run the Vite development server:
