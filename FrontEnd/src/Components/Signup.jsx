@@ -109,7 +109,7 @@ export default function Signup({ onAuthSuccess, onToggleAuth }) {
           Create your account
         </h1>
         <p style={{ fontSize: 13.5, color: 'var(--text-muted)', marginTop: 6 }}>
-          Start managing your links with Katomarn
+          Start managing your links with URLytics 
         </p>
       </div>
 
@@ -191,7 +191,7 @@ export default function Signup({ onAuthSuccess, onToggleAuth }) {
       </div>
 
       <p style={{ textAlign: 'center', fontSize: 12, color: 'var(--text-placeholder)', marginTop: 18 }}>
-        Katomarn · URL Intelligence Platform
+        URLytics  · URL Intelligence Platform
       </p>
     </div>
   );

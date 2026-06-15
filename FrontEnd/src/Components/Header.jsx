@@ -45,7 +45,7 @@ export default function Header({ user, onLogout, currentPath }) {
         </div>
         <div>
           <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
-            Katomarn
+            URLytics 
           </div>
           <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--text-muted)', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
             {isAnalytics ? 'Analytics Report' : 'URL Management'}

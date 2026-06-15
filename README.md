@@ -1,6 +1,6 @@
-# Katomarn — Full-Stack URL Shortener & Link Intelligence Platform
+# URLytics  — Full-Stack URL Shortener & Link Intelligence Platform
 
-Katomarn is a high-performance, full-stack URL shortener and link analytics platform. Built with a Node.js + Express backend, a PostgreSQL database, and a React + Tailwind CSS v4 frontend, it delivers robust URL tracking, expiration limits, QR Code generation, and device/browser profiling metrics via clean visual charts.
+URLytics  is a high-performance, full-stack URL shortener and link analytics platform. Built with a Node.js + Express backend, a PostgreSQL database, and a React + Tailwind CSS v4 frontend, it delivers robust URL tracking, expiration limits, QR Code generation, and device/browser profiling metrics via clean visual charts.
 
 ---
 
@@ -35,7 +35,7 @@ graph TD
 ## 📁 Repository Structure
 
 ```text
-Katomarn/
+URLytics /
 ├── Backend/
 │   ├── Controller/          # Handles REST API requests (auth, URLs, analytics)
 │   ├── Database/            # Postgres schema migration.sql & db.js pool connector
@@ -66,7 +66,7 @@ Katomarn/
 *   PostgreSQL database instance running locally or on a server
 
 ### 1. Database Setup
-Create a PostgreSQL database named `katomarn` (or whatever you prefer) and execute the SQL structure located in:
+Create a PostgreSQL database named `URLytics ` (or whatever you prefer) and execute the SQL structure located in:
 👉 **`Backend/Database/migration.sql`**
 
 This script initializes the tables:
@@ -90,7 +90,7 @@ This script initializes the tables:
     DB_PASSWORD=your_postgres_password
     DB_HOST=localhost
     DB_PORT=5432
-    DB_NAME=katomarn
+    DB_NAME=URLytics 
     JWT_ACCESS_SECRET=your_jwt_access_secret_key
     JWT_REFRESH_SECRET=your_jwt_refresh_secret_key
     FRONTEND_URL=http://localhost:5173

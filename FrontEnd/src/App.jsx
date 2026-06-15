@@ -40,7 +40,7 @@ function LoadingScreen() {
         }} />
       </div>
       <div style={{ textAlign: 'center' }}>
-        <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>Katomarn</div>
+        <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>URLytics </div>
         <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 4, fontWeight: 500 }}>Initializing secure session…</div>
       </div>
     </div>

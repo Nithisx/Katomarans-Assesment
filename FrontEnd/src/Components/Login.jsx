@@ -77,7 +77,7 @@ export default function Login({ onAuthSuccess, onToggleAuth }) {
           Welcome back
         </h1>
         <p style={{ fontSize: 13.5, color: 'var(--text-muted)', marginTop: 6, fontWeight: 400 }}>
-          Sign in to your Katomarn account
+          Sign in to your URLytics  account
         </p>
       </div>
 
@@ -153,7 +153,7 @@ export default function Login({ onAuthSuccess, onToggleAuth }) {
 
       {/* Footer note */}
       <p style={{ textAlign: 'center', fontSize: 12, color: 'var(--text-placeholder)', marginTop: 18 }}>
-        Katomarn · URL Intelligence Platform
+        URLytics  · URL Intelligence Platform
       </p>
     </div>
   );

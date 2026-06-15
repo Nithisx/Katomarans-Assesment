@@ -1,4 +1,4 @@
-# Katomarn Authentication & URL Shortener - API Documentation
+# URLytics  Authentication & URL Shortener - API Documentation
 
 Base URL: `https://s-jgt9.onrender.com`
 

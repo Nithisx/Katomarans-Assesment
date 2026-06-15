@@ -44,7 +44,7 @@ app.use('/api/urls', urlRoutes);
 app.get('/', (req, res) => {
   res.json({
     success: true,
-    message: 'Welcome to the Katomarn Auth and URL Shortener API. Please reference api_documentation.md in the backend folder.',
+    message: 'Welcome to the URLytics  Auth and URL Shortener API. Please reference api_documentation.md in the backend folder.',
   });
 });
 
