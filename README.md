@@ -8,9 +8,9 @@
 
 | Resource | Link |
 |----------|------|
-| 🌐 **Live Application** | [https://shorturl-wine.vercel.app](https://shorturl-wine.vercel.app) |
-| 🎬 **Demo Video (YouTube)** | [<I will replace it>](#) |
-| 💻 **GitHub Repository** | [https://github.com/hemadarini/Katomarans-Assesment](https://github.com/hemadarini/Katomarans-Assesment) |
+| 🌐 **Live Application** | [shorturl-wine.vercel.app](https://shorturl-wine.vercel.app) |
+| 🎬 **Demo Video (YouTube)** | [Watch Video](https://youtu.be/rOKubaCLYu0?si=6aX0PF2EI7vey7wz) |
+| 💻 **GitHub Repository** | [Katomarans-Assesment](https://github.com/hemadarini/Katomarans-Assesment) |
 
 ---
 
@@ -82,13 +82,12 @@ The problem was broken down into these functional modules before any code was wr
 ### Phase 3 — AI Prompting Strategy
 
 AI tools were used to:
-- Plan database schema (tables: `users`, `urls`, `visits`)
 - Generate Express middleware for JWT verification and silent refresh
 - Write the User-Agent parsing logic for device/browser classification
 - Build custom SVG chart components for analytics visualization
 - Design the glassmorphic QR code modal
 
-All generated code was reviewed, tested, and understood before submission. Prompts used will be explained during the interview.
+
 
 ---
 
@@ -349,7 +348,6 @@ Full payload schemas and response formats are documented in `Backend/api_documen
 
 ## Sample Output
 
-> 📸 **Note:** Replace the placeholders below with actual screenshots from your running application before submission.
 
 ### Dashboard View
 
@@ -357,7 +355,8 @@ Full payload schemas and response formats are documented in `Backend/api_documen
 
 ### Analytics Page
 
-![Analytics](./FrontEnd/public/Analyts.png)
+![Analytics Overview](./FrontEnd/public/Analyts.png)
+![Analytics](./FrontEnd/public/Analyts1.png)
 
 ### QR Code Modal
 
